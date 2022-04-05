@@ -43,7 +43,7 @@ beforeAll(async () => {
 describe("POST /api/user/register", () => {
   describe("Register With Valid Credentials.", () => {
     test("Should register a new user with 201 Status Code.", async () => {
-      await request(app)
+      const response = await request(app)
         .post("/api/user/register")
         .send({
           username: "testUserName",
@@ -52,6 +52,13 @@ describe("POST /api/user/register", () => {
         })
         .expect("Content-Type", /json/)
         .expect(201);
+      const user = await User.find({ userId: response.body.userId });
+      expect(user).not.toBeNull();
+      expect(response.body).toMatchObject({
+        message: `User Created Successfully, Please Check your email to activate your account.`,
+        email: "test@test.com",
+      });
+      expect(user.password).not.toBe("testpassword");
     });
   });
   describe("Register With in use username.", () => {
@@ -97,7 +104,7 @@ describe("POST /api/user/register", () => {
 describe("POST /api/user/login", () => {
   describe("Try to login  with valid credentials.", () => {
     test("Should respond with 200 status code and a token.", async () => {
-      await request(app)
+      const response = await request(app)
         .post("/api/user/login")
         .send({
           username: userOne.username,
@@ -105,6 +112,7 @@ describe("POST /api/user/login", () => {
         })
         .expect("Content-Type", /json/)
         .expect(200);
+      expect(response.body).toHaveProperty("token");
     });
   });
   describe("Try to login  with Invalid credentials.", () => {
@@ -135,7 +143,7 @@ describe("POST /api/user/login", () => {
 describe("GET /api/user/user-by-token", () => {
   describe("Try to get user data with a valid token.", () => {
     test("Should respond with 200 status code .", async () => {
-      await request(app)
+      const response = await request(app)
         .get("/api/user/user-by-token")
         .send()
         .set("auth-token", userOneToken)
