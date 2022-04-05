@@ -30,7 +30,7 @@ const userOneToken = jwt.sign(
   process.env.JWT_TOKEN_SECRET
 );
 
-beforeAll(async () => {
+beforeEach(async () => {
   await User.deleteMany({});
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(userOne.password, salt);

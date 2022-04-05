@@ -80,6 +80,7 @@ exports.deleteRobotAlertContact = async (alertContactId) => {
   try {
     //uptime robot call
     const deleted = await UptimeRobotClient.deleteAlertContact(alertContactId);
+    console.log({ deleted });
     return { alertContact: deleted, response: deleted };
   } catch (error) {
     return { response: error, alertContact: null };
