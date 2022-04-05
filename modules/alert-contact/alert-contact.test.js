@@ -61,7 +61,7 @@ describe("POST /api/alertContacts/create", () => {
         .send({
           friendly_name: "email test",
           type: "email",
-          value: "test@gmail.com",
+          value: "testing.js@testjs.com",
         })
         .set("auth-token", userOneToken)
         .expect("Content-Type", /json/)
@@ -80,7 +80,7 @@ describe("POST /api/alertContacts/create", () => {
         .send({
           friendly_name: "newName",
           type: "email",
-          value: "test@gmail.com",
+          value: "testing.js@testjs.com",
         })
         .set("auth-token", userOneToken)
         .expect("Content-Type", /json/)
